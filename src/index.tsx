@@ -1,26 +1,43 @@
 import '@nevermined-io/styles/lib/esm/styles/globals.scss'
 import '@nevermined-io/styles/lib/esm/index.css'
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Catalog, AssetService } from '@nevermined-io/catalog-core';
-import { appConfig } from './config';
-import Example from 'examples';
-import { MetaMask } from '@nevermined-io/catalog-providers';
-import chainConfig, { mumbaiChainId } from './chain_config';
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Catalog, AssetService } from '@nevermined-io/catalog-core'
+import { appConfig } from './config/config'
+import Example from 'examples'
+import { MetaMask } from '@nevermined-io/catalog-providers'
+import chainConfig, { mumbaiChainId } from './chain_config'
+import { NftList } from 'modules/nft-list/nft-list'
+import { NftDetails } from 'modules/nft-details/nft-details'
 
-ReactDOM.render(
+const router = createBrowserRouter([
+  {
+    path: 'nft/:did',
+    element: <NftDetails />,
+  },
+  {
+    path: 'nfts',
+    element: <NftList />,
+  },
+  {
+    path: '/',
+    element: <Example />,
+  },
+])
+
+createRoot(document.getElementById('root') as HTMLElement).render(
   <div>
-    <Catalog.NeverminedProvider config={appConfig} verbose={true}>
+    <Catalog.NeverminedProvider config={appConfig} verbose>
       <AssetService.AssetPublishProvider>
         <MetaMask.WalletProvider
           externalChainConfig={chainConfig}
           correctNetworkId={mumbaiChainId}
           nodeUri={String(appConfig.nodeUri)}
         >
-          <Example />
+          <RouterProvider router={router} />
         </MetaMask.WalletProvider>
       </AssetService.AssetPublishProvider>
     </Catalog.NeverminedProvider>
-  </div>,
-  document.getElementById('root') as HTMLElement
-);
+  </div>
+)
