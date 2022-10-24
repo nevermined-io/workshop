@@ -7,9 +7,9 @@ import { Catalog, AssetService } from '@nevermined-io/catalog-core'
 import { appConfig } from './config/config'
 import Example from 'examples'
 import { MetaMask } from '@nevermined-io/catalog-providers'
-import chainConfig, { mumbaiChainId } from './chain_config'
-import { NftList } from 'modules/nft-list/nft-list'
-import { NftDetails } from 'modules/nft-details/nft-details'
+import chainConfig, { mumbaiChainId } from './config/chain_config'
+import { NftList } from 'pages/nft-list/nft-list'
+import { NftDetails } from 'pages/nft-details/nft-details'
 
 const router = createBrowserRouter([
   {
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <div>
-    <Catalog.NeverminedProvider config={appConfig} verbose>
+    <Catalog.NeverminedProvider config={appConfig} verbose={!!appConfig.verbose}>
       <AssetService.AssetPublishProvider>
         <MetaMask.WalletProvider
           externalChainConfig={chainConfig}
@@ -39,5 +39,5 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         </MetaMask.WalletProvider>
       </AssetService.AssetPublishProvider>
     </Catalog.NeverminedProvider>
-  </div>
+  </div>,
 )
