@@ -1,0 +1,80 @@
+.progress-bar {
+  &__step {
+    color: #67cff9;
+    width: 100%;
+    max-width: 190px;
+    margin-right: 16px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__step-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__text {
+    color: #2b465c;
+
+    &--active,
+    &--complete {
+      color: #67cff9;
+    }
+  }
+
+  &__underline {
+    background: #2b465c;
+    height: 1px;
+    min-height: 0;
+    margin-top: 16px;
+
+    &--active,
+    &--complete {
+      background: linear-gradient(91.25deg, #7834f9 0%, #67cff9 100%);
+    }
+  }
+
+  &__icon {
+    width: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 16px;
+    background: #2b465c;
+    width: 24px;
+    height: 24px;
+
+    svg {
+      width: 10px;
+
+      path {
+        fill: #13122b;
+      }
+    }
+
+    &--active {
+      border: 1px solid #67cff9;
+
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
+    }
+
+    &--complete {
+      background: linear-gradient(91.25deg, #7834f9 0%, #67cff9 100%);
+
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
+    }
+  }
+}
