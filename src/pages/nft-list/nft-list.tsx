@@ -48,9 +48,9 @@ export const NftList: React.FC<NftListProps> = () => {
       {assets.length ? (
         <div className={b()}>
           {assets.map(({ ddo, metadata }) => (
-            <div key={ddo.id} className={b('item')}>
-              <div>{metadata.main.name || ddo.id}</div>
-            </div>
+            <a key={ddo.id} className={b('item')}>
+              {metadata.main?.name || ddo.id}
+            </a>
           ))}
         </div>
       ) : (

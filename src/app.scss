@@ -1,0 +1,23 @@
+body {
+  padding: 1rem;
+}
+
+header {
+  margin-bottom: 1rem;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  ul > li {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+}

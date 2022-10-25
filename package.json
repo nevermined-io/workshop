@@ -1,34 +1,26 @@
 {
-  "name": "create-nevermined-react",
+  "name": "nevermined-workshop",
   "author": "Nevermined AG",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": {
-    "url": "https://github.com/nevermined-io/create-nevermined-react"
+    "url": "https://github.com/nevermined-io/workshop"
   },
   "license": "Apache-2.0",
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false PORT=3445 BROWSER=none react-app-rewired start",
     "start-https": "GENERATE_SOURCEMAP=false HTTPS=true PORT=3445 BROWSER=none react-app-rewired start",
-    "build": "npm run clean && npm run build:tsc && npm run build:webpack",
-    "build:react": "react-scripts build",
+    "lint": "eslint ./",
+    "lint:fix": "npm run lint -- --fix",
+    "build": "npm run clean && npm run build:tsc && npm run build:react",
+    "build:react": "react-app-rewired build",
     "build:tsc": "tsc --noEmit false",
     "clean": "rm -rf dist",
-    "eject": "react-scripts eject",
-    "lint": "eslint ./",
+    "eject": "react-app-rewired eject",
     "ts:lint": "npx eslint . --ext .ts,.tsx",
-    "artifacts:download": "sh ./scripts/download-artifacts.sh v2.1.0 mumbai"
+    "artifacts:download": "./scripts/download-artifacts.sh v2.1.0 mumbai"
   },
-  "bin": {
-    "create-nevermined-react": ".bin/create-nevermined-react.js"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ],
-    "rules": {
-      "react-hooks/exhaustive-deps": "off"
-    }
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -42,8 +34,8 @@
     ]
   },
   "dependencies": {
-    "@nevermined-io/catalog-core": "0.3.0",
-    "@nevermined-io/catalog-providers": "0.3.0",
+    "@nevermined-io/catalog-core": "0.3.1",
+    "@nevermined-io/catalog-providers": "0.3.1",
     "@nevermined-io/styles": "^0.1.9",
     "axios": "^0.24.0",
     "bem-helpers": "^1.1.0",
@@ -52,18 +44,15 @@
     "ethers": "^5.6.9",
     "node-fetch": "^3.2.0",
     "os-browserify": "^0.3.0",
-    "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.0",
-    "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "web-vitals": "^2.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.6",
+    "@babel/core": "^7.16.5",
     "@babel/plugin-syntax-flow": "^7.14.5",
     "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@babel/preset-env": "^7.16.5",
@@ -73,7 +62,7 @@
     "@types/lodash.uniqby": "^4.7.6",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
-    "@types/react-dom": "^18.0.6",
+    "@types/react-dom": "^18.0.7",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "babel-loader": "8.1.0",
@@ -82,17 +71,17 @@
     "eslint-config-nevermined": "^0.2.0",
     "eslint-config-next": "^12.3.1",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-import": "^2.26.0",
     "jest-environment-jsdom": "^27.4.4",
     "jest-mock-axios": "^4.5.0",
+    "path-browserify": "^1.0.1",
     "prettier": "^2.7.1",
-    "prettier-eslint": "^13.0.0",
     "prettier-package-json": "^2.7.0",
-    "prettier-stylelint": "^0.4.2",
     "process": "^0.11.10",
-    "sass": "^1.55.0",
-    "sass-loader": "^13.1.0",
+    "react-router-dom": "^6.4.2",
+    "sass": "^1.45.0",
+    "sass-loader": "10.1.1",
+    "stream-browserify": "^3.0.0",
     "typescript": "^4.5.4"
   },
   "resolve": {

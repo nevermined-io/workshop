@@ -1,23 +1,12 @@
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import React, { useEffect, useState } from 'react'
-import {
-  Catalog,
-  AssetService,
-  RoyaltyKind,
-  getRoyaltyScheme,
-  BigNumber,
-  DDO,
-  Logger,
-  MetaData,
-  Config,
-  Account,
-} from '@nevermined-io/catalog-core'
+import { Catalog, AssetService, RoyaltyKind, getRoyaltyScheme, BigNumber, DDO, Logger, MetaData, Config, Account } from '@nevermined-io/catalog-core'
 import { getCurrentAccount } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { UiText, UiLayout, BEM, UiButton } from '@nevermined-io/styles'
 import { Contract, ethers } from 'ethers'
 import styles from './example.module.scss'
-import { appConfig, erc20TokenAddress } from 'config/config'
+import { appConfig, erc20TokenAddress } from '../config/config'
 
 const b = BEM('example', styles)
 
@@ -25,10 +14,7 @@ export const getFeesFromBigNumber = (fees: BigNumber): string => {
   return (fees.toNumber() / 10000).toPrecision(2).toString()
 }
 
-export const loadNeverminedConfigContract = async (
-  config: Config,
-  account: Account,
-): Promise<Contract> => {
+export const loadNeverminedConfigContract = async (config: Config, account: Account): Promise<Contract> => {
   const abiNvmConfig = `${config.artifactsFolder}/NeverminedConfig.mumbai.json`
   const contractFetched = await fetch(abiNvmConfig)
   const nvmConfigAbi = await contractFetched.json()
@@ -46,33 +32,26 @@ const SDKInstance = () => {
   return (
     <>
       <UiLayout>
-        <UiText className={b('detail')} variants={['bold']}>
-          Is Loading SDK:
-        </UiText>
+        <UiText className={b('detail')} variants={['bold']}>Is Loading SDK:</UiText>
         <UiText>{isLoadingSDK ? 'Yes' : 'No'}</UiText>
       </UiLayout>
 
       <UiLayout>
-        <UiText variants={['bold']} className={b('detail')}>
-          Is SDK Avaialable:
-        </UiText>
+        <UiText variants={['bold']} className={b('detail')}>Is SDK Avaialable:</UiText>
         <UiText>{sdk && Object.keys(sdk).length > 0 ? 'Yes' : 'No'}</UiText>
       </UiLayout>
     </>
   )
 }
 
-const SingleAsset = ({ ddo }: { ddo: DDO }) => {
+const SingleAsset = ({ddo}: {ddo: DDO}) => {
+
   return (
     <>
       <UiLayout>
-        <UiText className={b('detail')} variants={['bold']}>
-          Asset {ddo.id.slice(0, 10)}...:
-        </UiText>
+        <UiText className={b('detail')} variants={['bold']}>Asset {ddo.id.slice(0, 10)}...:</UiText>
       </UiLayout>
-      <UiText className={b('ddo')} variants={['detail']}>
-        {JSON.stringify(ddo)}
-      </UiText>
+      <UiText className={b('ddo')} variants={['detail']}>{JSON.stringify(ddo)}</UiText>
     </>
   )
 }
@@ -80,7 +59,7 @@ const SingleAsset = ({ ddo }: { ddo: DDO }) => {
 const constructRewardMap = (
   recipientsData: any[],
   priceWithoutFee: number,
-  ownerWalletAddress: string,
+  ownerWalletAddress: string
 ): Map<string, BigNumber> => {
   const rewardMap: Map<string, BigNumber> = new Map()
   let recipients: any = []
@@ -89,8 +68,8 @@ const constructRewardMap = (
       {
         name: ownerWalletAddress,
         split: 100,
-        walletAddress: ownerWalletAddress,
-      },
+        walletAddress: ownerWalletAddress
+      }
     ]
   }
   let totalWithoutUser = 0
@@ -111,7 +90,7 @@ const constructRewardMap = (
   return rewardMap
 }
 
-const PublishAsset = ({ onPublish }: { onPublish: () => void }) => {
+const PublishAsset = ({onPublish}: {onPublish: () => void}) => {
   const { assets } = Catalog.useNevermined()
 
   return (
@@ -123,13 +102,13 @@ const PublishAsset = ({ onPublish }: { onPublish: () => void }) => {
   )
 }
 
-const BuyAsset = ({ ddo }: { ddo: DDO }) => {
+const BuyAsset = ({ddo}: {ddo: DDO}) => {
   const { assets, account, isLoadingSDK, subscription, sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
   const [ownNFT1155, setOwnNFT1155] = useState(false)
   const [isBought, setIsBought] = useState(false)
   const [owner, setOwner] = useState('')
-
+  
   useEffect(() => {
     (async () => {
       setOwnNFT1155(await account.isNFT1155Holder(ddo.id, walletAddress))
@@ -138,18 +117,14 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
   }, [walletAddress, isBought])
 
   const buy = async () => {
-    if (!account.isTokenValid()) {
+    const currentAccount = await getCurrentAccount(sdk)
+    if (!account.isTokenValid()
+      || account.getAddressTokenSigner().toLowerCase() !== currentAccount.getId().toLowerCase()
+    ) {
       await account.generateToken()
     }
 
-    const currentAccount = await getCurrentAccount(sdk)
-    const response = await subscription.buySubscription(
-      ddo.id,
-      currentAccount,
-      owner,
-      BigNumber.from(1),
-      1155,
-    )
+    const response = await subscription.buySubscription(ddo.id, currentAccount, owner, BigNumber.from(1), 1155)
     setIsBought(Boolean(response))
   }
 
@@ -163,12 +138,12 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
         <UiButton onClick={download} disabled={isLoadingSDK}>
           Download NFT
         </UiButton>
-      ) : owner !== walletAddress ? (
+      ) : (
+        owner !== walletAddress ?
         <UiButton onClick={buy} disabled={isLoadingSDK}>
           buy
         </UiButton>
-      ) : (
-        <span>The owner cannot buy, please change the account to buy the NFT asset</span>
+        : <span>The owner cannot buy, please change the account to buy the NFT asset</span>
       )}
     </UiLayout>
   )
@@ -178,9 +153,7 @@ const MMWallet = () => {
   const { loginMetamask, walletAddress } = MetaMask.useWallet()
   return (
     <UiLayout>
-      <UiText variants={['bold']} className={b('detail')}>
-        Wallet address:
-      </UiText>
+      <UiText variants={['bold']} className={b('detail')}>Wallet address:</UiText>
       <UiText>{walletAddress}</UiText>
       {!walletAddress && <UiButton onClick={loginMetamask}>Connect To MM</UiButton>}
     </UiLayout>
@@ -197,18 +170,16 @@ const App = () => {
   const metadata: MetaData = {
     main: {
       name: '',
-      files: [
-        {
-          index: 0,
-          contentType: 'application/json',
-          url: 'https://github.com/nevermined-io/docs/blob/main/docs/architecture/specs/examples/did/v0.4/ddo-example.json',
-        },
-      ],
+      files: [{
+        index: 0,
+        contentType: 'application/json',
+        url: 'https://github.com/nevermined-io/docs/blob/main/docs/architecture/specs/examples/did/v0.4/ddo-example.json'
+      }],
       type: 'dataset',
       author: '',
       license: '',
-      dateCreated: new Date().toISOString(),
-    },
+      dateCreated: new Date().toISOString()
+    }
   }
 
   const onPublish = async () => {
@@ -220,7 +191,10 @@ const App = () => {
       const configContract = await loadNeverminedConfigContract(appConfig, publisher)
       const networkFee = await configContract.getMarketplaceFee()
       if (networkFee.gt(0)) {
-        assetRewards.addNetworkFees(await configContract.getFeeReceiver(), networkFee)
+        assetRewards.addNetworkFees(
+          await configContract.getFeeReceiver(),
+          networkFee
+        )
         Logger.log(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
       }
 
@@ -230,9 +204,12 @@ const App = () => {
         amount: 0,
       }
 
-      if (!account.isTokenValid()) {
+      if (!account.isTokenValid()
+        || account.getAddressTokenSigner().toLowerCase() !== publisher.getId().toLowerCase()
+      ) {
         await account.generateToken()
       }
+
       const response = await publishNFT1155({
         gatewayAddress: String(appConfig.gatewayAddress),
         assetRewards,
@@ -250,17 +227,21 @@ const App = () => {
     }
   }
 
+
   return (
     <div className={b('container')}>
       <SDKInstance />
       <MMWallet />
-      {walletAddress && !ddo.id && <PublishAsset onPublish={onPublish} />}
-      {!isLoadingSDK && ddo?.id && (
+      {walletAddress && !ddo.id && (
+        <PublishAsset onPublish={onPublish} />
+      )}
+      {!isLoadingSDK && ddo?.id &&  (
         <>
-          <SingleAsset ddo={ddo} />
-          <BuyAsset ddo={ddo} />
+          <SingleAsset ddo={ddo}/>
+          <BuyAsset ddo={ddo}/>
         </>
       )}
+      
     </div>
   )
 }

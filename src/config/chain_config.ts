@@ -1,5 +1,5 @@
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { acceptedChainId } from 'config/config'
+import { acceptedChainId } from './config'
 
 const acceptedChainIdHex = zeroX((+acceptedChainId).toString(16))
 const spreeChainId = zeroX((8996).toString(16))
@@ -14,11 +14,11 @@ const ChainConfig = {
     nativeCurrency: {
       name: 'Ethereum',
       symbol: 'ETH',
-      decimals: 18
+      decimals: 18,
     },
     rpcUrls: ['http://localhost:8545'],
     blockExplorerUrls: [''],
-    iconUrls: ['https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png']
+    iconUrls: ['https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'],
   },
   mumbai: {
     chainId: mumbaiChainId,
@@ -26,14 +26,14 @@ const ChainConfig = {
     nativeCurrency: {
       name: 'Matic',
       symbol: 'MATIC',
-      decimals: 18
+      decimals: 18,
     },
     rpcUrls: [
       'https://matic-mumbai.chainstacklabs.com',
-      'https://rpc-endpoints.superfluid.dev/mumbai'
+      'https://rpc-endpoints.superfluid.dev/mumbai',
     ],
     blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-    iconUrls: ['https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png']
+    iconUrls: ['https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'],
   },
   mainnet: {
     chainId: mainnetChainId,
@@ -41,11 +41,11 @@ const ChainConfig = {
     nativeCurrency: {
       name: 'Matic',
       symbol: 'MATIC',
-      decimals: 18
+      decimals: 18,
     },
     rpcUrls: ['https://polygon-rpc.com'],
     blockExplorerUrls: ['https://polygonscan.com/'],
-    iconUrls: ['https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png']
+    iconUrls: ['https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'],
   },
   returnConfig: (chainIdHex: string) => {
     if (chainIdHex === spreeChainId || chainIdHex === polygonLocalnetChainId) {
@@ -58,7 +58,7 @@ const ChainConfig = {
       return ChainConfig.mainnet
     }
     return ChainConfig.development
-  }
+  },
 }
 
 export default ChainConfig
