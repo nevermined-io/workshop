@@ -30,6 +30,9 @@ export const App = () => {
                   <li>
                     <Link to="nft/publish">Publish NFT</Link>
                   </li>
+                  <li>
+                    <Link to="poap">POAP</Link>
+                  </li>
                 </ul>
               </header>
               <section>
