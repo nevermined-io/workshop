@@ -36,6 +36,7 @@
   "dependencies": {
     "@nevermined-io/catalog-core": "0.3.1",
     "@nevermined-io/catalog-providers": "0.3.1",
+    "@nevermined-io/nevermined-sdk-js": "0.25.0",
     "@nevermined-io/styles": "^0.1.9",
     "axios": "^0.24.0",
     "bem-helpers": "^1.1.0",
