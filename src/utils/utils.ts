@@ -1,4 +1,4 @@
-import type { MetaData, DDO } from '@nevermined-io/catalog-core'
+import type { MetaData, DDO, BigNumber } from '@nevermined-io/catalog-core'
 import { categoryPrefix, networkPrefix, subcategoryPrefix } from './constants'
 
 export type DefiInfo = {
@@ -38,4 +38,8 @@ export function mapDdoToAsset(ddo: DDO): AssetInfo {
     metadata,
     defi: getDefiInfo(metadata),
   }
+}
+
+export const getFeesFromBigNumber = (fees: BigNumber): string => {
+  return (fees.toNumber() / 10000).toPrecision(2).toString()
 }

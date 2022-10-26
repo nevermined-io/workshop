@@ -6,6 +6,7 @@ import { NftList } from 'pages/nft-list/nft-list'
 import { NftDetails } from 'pages/nft-details/nft-details'
 import { NftPublish } from 'pages/nft-publish/nft-publish'
 import { App } from 'app'
+import { NotFound } from 'pages/not-found/not-found'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: '/example',
         element: <Example />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },

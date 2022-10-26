@@ -8,35 +8,48 @@ import {
   getRoyaltyScheme,
   MetaData,
   RoyaltyKind,
+  getCurrentAccount,
+  BigNumber,
+  Config,
+  Account,
+  Logger,
 } from '@nevermined-io/catalog-core'
-import { gatewayAddress, nftAddress } from 'config/config'
-import { FileType, handleAssetFiles } from 'utils/file-handler'
+import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
+import { appConfig, erc20TokenAddress } from 'config/config'
+import { FileType } from 'utils/file-handler'
 import stepStyles from '../step.module.scss'
 import styles from './files-step.module.scss'
 import { Action, BEM, UiFormInput, UiFormItem } from '@nevermined-io/styles'
 import { ReactComponent as DownloadIcon } from '../../../../assets/icons/download.svg'
 import { ReactComponent as CrossIcon } from '../../../../assets/icons/cross.svg'
+import { Contract, ethers } from 'ethers'
+import { getFeesFromBigNumber } from 'utils/utils'
 
 const step = BEM('step-container', stepStyles)
-const b = BEM('basic-info', styles)
+const b = BEM('files-step', styles)
 
 type FilesStepProps = {
+  currentStep: number
   goToPrevStep: () => void
   goToNextStep: () => void
 }
 
-export const FilesStep: React.FC<FilesStepProps> = ({ goToPrevStep, goToNextStep }) => {
-  const { sdk } = Catalog.useNevermined()
-  const { errorAssetMessage, setErrorAssetMessage, assetPublish, setAssetPublish, publishNFT721 } =
+export const FilesStep: React.FC<FilesStepProps> = ({
+  currentStep,
+  goToPrevStep,
+  goToNextStep,
+}) => {
+  const { account, sdk } = Catalog.useNevermined()
+  const { errorAssetMessage, setErrorAssetMessage, assetPublish, setAssetPublish, publishNFT1155 } =
     AssetService.useAssetPublish()
 
-  const uploadFiles = async () => {
-    const findLocal = assetPublish.assetFiles.find((file) => file.type === FileType.Local)
+//   const uploadFiles = async () => {
+//     const findLocal = assetPublish.assetFiles.find((file) => file.type === FileType.Local)
 
-    if (findLocal) {
-      await handleAssetFiles(assetPublish.assetFiles)
-    }
-  }
+//     if (findLocal) {
+//       await handleAssetFiles(assetPublish.assetFiles)
+//     }
+//   }
 
   const generateFilesMetadata = () => {
     const files: FileMetadata[] = []
@@ -45,7 +58,7 @@ export const FilesStep: React.FC<FilesStepProps> = ({ goToPrevStep, goToNextStep
       files.push({
         index: i + 1,
         contentType: assetFile.content_type ? assetFile.content_type : '',
-        url: assetFile.filecoin_id ? assetFile.filecoin_id : '',
+        url: 'https://uploads5.wikiart.org/00268/images/william-holbrook-beard/the-bear-dance-1870.jpg',
         contentLength: assetFile.size ? assetFile.size : '',
       })
     })
@@ -124,9 +137,70 @@ export const FilesStep: React.FC<FilesStepProps> = ({ goToPrevStep, goToNextStep
     }
   }
 
-  const handleSubmitClick = async () => {
+  const constructRewardMap = (
+    recipientsData: any[],
+    priceWithoutFee: number,
+    ownerWalletAddress: string,
+  ): Map<string, BigNumber> => {
+    const rewardMap: Map<string, BigNumber> = new Map()
+    let recipients: any = []
+
+    if (recipientsData.length === 1 && recipientsData[0].split === 0) {
+      recipients = [
+        {
+          name: ownerWalletAddress,
+          split: 100,
+          walletAddress: ownerWalletAddress,
+        },
+      ]
+    }
+
+    let totalWithoutUser = 0
+
+    recipients.forEach((recipient: any) => {
+      if (recipient.split && recipient.split > 0) {
+        const ownSplit = ((priceWithoutFee * recipient.split) / 100).toFixed()
+        rewardMap.set(recipient.walletAddress, BigNumber.from(+ownSplit))
+        totalWithoutUser += recipient.split
+      }
+    })
+
+    if (!rewardMap.has(ownerWalletAddress)) {
+      const ownSplitReinforced = +((priceWithoutFee * (100 - totalWithoutUser)) / 100).toFixed()
+      rewardMap.set(ownerWalletAddress, BigNumber.from(ownSplitReinforced))
+    }
+
+    return rewardMap
+  }
+
+  const loadNeverminedConfigContract = async (
+    config: Config,
+    account: Account,
+  ): Promise<Contract> => {
+    const abiNvmConfig = `${config.artifactsFolder}/NeverminedConfig.mumbai.json`
+    const contractFetched = await fetch(abiNvmConfig)
+    const nvmConfigAbi = await contractFetched.json()
+
+    return new ethers.Contract(
+      nvmConfigAbi.address,
+      nvmConfigAbi.abi,
+      await account.findSigner(nvmConfigAbi.address),
+    )
+  }
+
+  const publish = async () => {
     try {
-      await uploadFiles()
+      const publisher = await getCurrentAccount(sdk)
+      const rewardsRecipients: any[] = []
+      const assetRewardsMap = constructRewardMap(rewardsRecipients, 100, publisher.getId())
+      const assetRewards = new AssetRewards(assetRewardsMap)
+      const configContract = await loadNeverminedConfigContract(appConfig, publisher)
+      const networkFee = await configContract.getMarketplaceFee()
+
+      if (networkFee.gt(0)) {
+        assetRewards.addNetworkFees(await configContract.getFeeReceiver(), networkFee)
+        Logger.log(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
+      }
 
       const royaltyAttributes = {
         royaltyKind: RoyaltyKind.Standard,
@@ -134,24 +208,44 @@ export const FilesStep: React.FC<FilesStepProps> = ({ goToPrevStep, goToNextStep
         amount: 0,
       }
 
-      publishNFT721({
-        nftAddress: nftAddress,
-        metadata: generateMetadata(),
-        providers: [gatewayAddress],
-        royaltyAttributes: royaltyAttributes,
-      })
-        .then(() => {
-          toast.success('Asset published correctly in the Marketplace')
-          goToNextStep()
+      if (
+        !account.isTokenValid() ||
+        account.getAddressTokenSigner().toLowerCase() !== publisher.getId().toLowerCase()
+      ) {
+        await account.generateToken()
+      }
+
+      try {
+        await publishNFT1155({
+          gatewayAddress: String(appConfig.gatewayAddress),
+          assetRewards,
+          metadata: generateMetadata(),
+          nftAmount: BigNumber.from(1),
+          preMint: true,
+          cap: BigNumber.from(100),
+          royaltyAttributes,
+          erc20TokenAddress,
         })
-        .catch((error) => {
-          if (error.message.includes('Transaction was not mined within 50 blocks')) {
-            setErrorAssetMessage(
-              'Transaction was not mined within 50 blocks, but it might still be mined. Check later the Published Assets section in your Account',
-            )
-          }
-          toast.error(errorAssetMessage)
-        })
+
+        toast.success('Asset published correctly in the Marketplace')
+        goToNextStep()
+      } catch (error: any) {
+        if (error.message.includes('Transaction was not mined within 50 blocks')) {
+          setErrorAssetMessage(
+            'Transaction was not mined within 50 blocks, but it might still be mined. Check later the Published Assets section in your Account',
+          )
+        }
+        toast.error(errorAssetMessage)
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const handleSubmitClick = async () => {
+    try {
+    //   await uploadFiles()
+      await publish()
     } catch (error: any) {
       setErrorAssetMessage(error.message)
     }
@@ -160,54 +254,48 @@ export const FilesStep: React.FC<FilesStepProps> = ({ goToPrevStep, goToNextStep
   return (
     <>
       <div className={step('step-title')}>
-        <span className={step('step-title-icon')}>3</span>
+        <span className={step('step-title-icon')}>{currentStep}</span>
         <span className={step('step-title-text')}>Asset File</span>
       </div>
-      <div className={b('files-step')}>
-        <div>
-          <UiFormInput
-            id="computer"
-            className={b('publish-form-input', ['button-only'])}
-            type="file"
-            label={
-              <div className={b('upload-button')}>
-                <span className={b('upload-text')}>Upload file</span>
-                <DownloadIcon className={b('upload-icon')} />
+      <div className={step('files-step')}>
+        <UiFormInput
+          id="computer"
+          className={step('step-form', ['file-upload'])}
+          type="file"
+          label={
+            <div className={b('upload-button')}>
+              <span className={b('upload-text')}>Upload file</span>
+              <DownloadIcon className={b('upload-icon')} />
+            </div>
+          }
+          onChange={handleNewFile}
+          placeholder="Select the file"
+        />
+        {assetPublish.assetFiles.length > 0 && (
+          <div className={b('files-container')}>
+            {assetPublish.assetFiles.map((assetfile) => (
+              <div className={b('files')} key={assetfile.label}>
+                <UiFormItem
+                  value={assetfile.label}
+                  onClick={() => removeFile(assetfile.label)}
+                  action={Action.Remove}
+                  actionIcon={(action) => (
+                    <>{action === 'remove' && <CrossIcon className={b('remove-icon')} />}</>
+                  )}
+                  disabled
+                  readOnly
+                />
               </div>
-            }
-            onChange={handleNewFile}
-            placeholder="Select the file"
-          />
-          {assetPublish.assetFiles.length > 0 && (
-            <>
-              <div className={b('publish-current-files-container')}>
-                {assetPublish.assetFiles.map((assetfile) => (
-                  <div className={b('publish-current-files')} key={assetfile.label}>
-                    <UiFormItem
-                      value={assetfile.label}
-                      onClick={() => removeFile(assetfile.label)}
-                      action={Action.Remove}
-                      actionIcon={(action) => (
-                        <>{action === 'remove' && <CrossIcon className={b('remove-icon')} />}</>
-                      )}
-                      disabled
-                      readOnly
-                    />
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-        <div>
-          <div className={b('user-publish-submit-container', ['submit'])}>
-            <button type="submit" onClick={goToPrevStep} className={b('button', ['secondary'])}>
-              Back
-            </button>
-            <button onClick={handleSubmitClick} className={b('button')}>
-              Publish Asset
-            </button>
+            ))}
           </div>
+        )}
+        <div className={b('buttons-container')}>
+          <button type="submit" onClick={goToPrevStep} className={step('button', ['secondary'])}>
+            Back
+          </button>
+          <button onClick={handleSubmitClick} className={step('button')}>
+            Publish Asset
+          </button>
         </div>
       </div>
     </>

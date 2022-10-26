@@ -1,5 +1,12 @@
 body {
-  padding: 1rem;
+  color: #67cff9;
+  font-family: 'Titillium Web';
+}
+
+#root {
+  padding: 2em 3em 0 3em;
+  margin: auto;
+  display: block;
 }
 
 header {
@@ -20,4 +27,21 @@ header {
       margin-right: 1rem;
     }
   }
+}
+
+section {
+  margin-top: 3em;
+}
+
+h2 {
+  font-size: 48px;
+  text-transform: uppercase;
+  letter-spacing: -0.03px;
+  line-height: 48px;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
 }

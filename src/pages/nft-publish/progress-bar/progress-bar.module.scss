@@ -1,6 +1,7 @@
 .progress-bar {
+  display: flex;
+
   &__step {
-    color: #67cff9;
     width: 100%;
     max-width: 190px;
     margin-right: 16px;
@@ -21,7 +22,7 @@
 
     &--active,
     &--complete {
-      color: #67cff9;
+      color: inherit;
     }
   }
 

@@ -48,11 +48,18 @@ export const NftPublish: React.FC<NftPublishProps> = () => {
   return (
     <div className={b()}>
       <h2>Publish new asset</h2>
+      <div className={b('divider-line', ['fade'])} />
       <ProgressBar currentStep={step} totalSteps={2} isProcessComplete={isProcessComplete} />
-      {step === 1 && <BasicInfoStep goToNextStep={handleGoToNextStep} />}
-      {step === 2 && (
-        <FilesStep goToPrevStep={handleGoToPrevStep} goToNextStep={handleProcessComplete} />
-      )}
+      <div className={b('step-content')}>
+        {step === 1 && <BasicInfoStep currentStep={step} goToNextStep={handleGoToNextStep} />}
+        {step === 2 && (
+          <FilesStep
+            currentStep={step}
+            goToPrevStep={handleGoToPrevStep}
+            goToNextStep={handleProcessComplete}
+          />
+        )}
+      </div>
     </div>
   )
 }

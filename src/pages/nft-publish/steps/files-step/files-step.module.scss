@@ -1,0 +1,68 @@
+.files-step {
+  &__upload-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__upload-text {
+    font-family: inherit;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    text-transform: uppercase;
+    margin-right: 16px;
+  }
+
+  &__upload-icon {
+    width: 24px;
+    height: 24px;
+    transform: rotate(180deg);
+
+    path {
+      fill: #fff;
+    }
+  }
+
+  &__buttons-container {
+    margin-top: 2em;
+  }
+
+  &__files-container {
+    margin-top: 2em;
+
+    .files-step__files {
+      margin-bottom: 16px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    input {
+      border: none;
+      padding: 0 24px;
+    }
+
+    input,
+    input:disabled {
+      background-color: #2b465c;
+      color: #8aaabe;
+    }
+
+    button {
+      flex-basis: auto;
+      padding-bottom: 0;
+
+      svg {
+        width: 14px;
+        height: 14px;
+
+        path {
+          fill: #fff;
+        }
+      }
+    }
+  }
+}
