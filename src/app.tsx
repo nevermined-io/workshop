@@ -11,38 +11,33 @@ import 'app.scss'
 export const App = () => {
   return (
     <>
-      <Catalog.NeverminedProvider config={appConfig} verbose={!!appConfig.verbose}>
-        <AssetService.AssetPublishProvider>
-          <MetaMask.WalletProvider
-            externalChainConfig={chainConfig}
-            correctNetworkId={mumbaiChainId}
-            nodeUri={String(appConfig.nodeUri)}
-          >
-            <>
-              <header>
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="nfts">NFTs</Link>
-                  </li>
-                  <li>
-                    <Link to="nft/publish">Publish NFT</Link>
-                  </li>
-                  <li>
-                    <Link to="poap">POAP</Link>
-                  </li>
-                </ul>
-              </header>
-              <section>
-                <Outlet />
-              </section>
-              <footer></footer>
-            </>
-          </MetaMask.WalletProvider>
-        </AssetService.AssetPublishProvider>
-      </Catalog.NeverminedProvider>
+      <header>
+        <ul>
+          <li>
+            <Link to="nfts">NFTs</Link>
+          </li>
+          <li>
+            <Link to="nft/publish">Publish NFT</Link>
+          </li>
+          <li>
+            <Link to="poap">POAP</Link>
+          </li>
+        </ul>
+      </header>
+      <section>
+        <Catalog.NeverminedProvider config={appConfig} verbose={!!appConfig.verbose}>
+          <AssetService.AssetPublishProvider>
+            <MetaMask.WalletProvider
+              externalChainConfig={chainConfig}
+              correctNetworkId={mumbaiChainId}
+              nodeUri={String(appConfig.nodeUri)}
+            >
+              <Outlet />
+            </MetaMask.WalletProvider>
+          </AssetService.AssetPublishProvider>
+        </Catalog.NeverminedProvider>
+      </section>
+      <footer></footer>
     </>
   )
 }

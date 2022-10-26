@@ -5,6 +5,7 @@ import Example from 'examples'
 import { NftList } from 'pages/nft-list/nft-list'
 import { NftDetails } from 'pages/nft-details/nft-details'
 import { NftPublish } from 'pages/nft-publish/nft-publish'
+import { POAP } from 'pages/poap/poap'
 import { App } from 'app'
 import { NotFound } from 'pages/not-found/not-found'
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/example',
         element: <Example />,
+      },
+      {
+        path: '/poap',
+        element: <POAP />,
       },
       {
         path: '*',
