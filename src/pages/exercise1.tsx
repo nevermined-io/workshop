@@ -5,21 +5,21 @@ export const Exercise1 = () => {
   const { isWalletConnected, enableNextStep } = useContext(AppContext)
 
   useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'http://localhost:8080/widget-poap.js'
+    script.defer = true
+    document.body.appendChild(script)
+  }, [])
+
+  useEffect(() => {
     enableNextStep(isWalletConnected)
   }, [isWalletConnected])
 
   return (
     <>
-      {/* https://github.com/nevermined-io/nvm-one-widgets */}
-      <script
-        async
-        defer
-        type="text/javascript"
-        src="http://localhost:8080/poap-widget.js"
-      ></script>
       <div
         id="poap-widget"
-        nvm-did="did:nv:48e9193249c5c394436c0191aa3f6bf3e640032c2031b7adc89675669a41cfd2"
+        nvm-did="did:nv:2c66b9b65c71951b0c5155bfe6c374d68cc7483d715b11e27a39f286ca3d0722"
       ></div>
     </>
   )
