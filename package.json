@@ -17,7 +17,7 @@
     "clean": "rm -rf dist",
     "eject": "react-app-rewired eject",
     "ts:lint": "npx eslint . --ext .ts,.tsx",
-    "artifacts:download": "./scripts/download-artifacts.sh v2.1.0 mumbai"
+    "artifacts:download": "./scripts/download-artifacts.sh v2.1.0 mumbai public"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
