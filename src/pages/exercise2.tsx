@@ -1,55 +1,73 @@
-import React from 'react'
-import { toast } from 'react-toastify'
+/* eslint-disable */
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
+  Account,
   AssetFile,
   AssetService,
+  BigNumber,
   Catalog,
+  Config,
   FileMetadata,
+  getCurrentAccount,
   getRoyaltyScheme,
+  Logger,
   MetaData,
   RoyaltyKind,
-  getCurrentAccount,
-  BigNumber,
-  Config,
-  Account,
-  Logger,
 } from '@nevermined-io/catalog-core'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
+import { BEM, UiFormInput, UiFormTextarea, UiPopupHandlers } from '@nevermined-io/styles'
+import { Contract, ethers } from 'ethers'
 import { appConfig, erc20TokenAddress } from 'config/config'
 import { FileType } from 'utils/file-handler'
-import stepStyles from '../step.module.scss'
-import styles from './files-step.module.scss'
-import { Action, BEM, UiFormInput, UiFormItem } from '@nevermined-io/styles'
-import { ReactComponent as DownloadIcon } from '../../../../assets/icons/download.svg'
-import { ReactComponent as CrossIcon } from '../../../../assets/icons/cross.svg'
-import { Contract, ethers } from 'ethers'
 import { getFeesFromBigNumber } from 'utils/utils'
+import LoadingIcon from 'components/loading-icon/loading-icon'
+import { ReactComponent as SuccessIcon } from 'assets/icons/success.svg'
+import { ReactComponent as NeverminedAbstractIcon } from 'assets/icons/nevermined-abstract.svg'
 
-const step = BEM('step-container', stepStyles)
-const b = BEM('files-step', styles)
+const b = BEM('nft-publish', {})
 
-type FilesStepProps = {
-  currentStep: number
-  goToPrevStep: () => void
-  goToNextStep: () => void
-}
+type NftPublishProps = unknown
 
-export const FilesStep: React.FC<FilesStepProps> = ({
-  currentStep,
-  goToPrevStep,
-  goToNextStep,
-}) => {
+export const Exercise2: React.FC<NftPublishProps> = () => {
   const { account, sdk } = Catalog.useNevermined()
-  const { errorAssetMessage, setErrorAssetMessage, assetPublish, setAssetPublish, publishNFT1155 } =
-    AssetService.useAssetPublish()
+  const {
+    assetPublish,
+    handleChange,
+    errorAssetMessage,
+    setErrorAssetMessage,
+    setAssetPublish,
+    publishNFT1155,
+  } = AssetService.useAssetPublish()
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [fileUrl, setFileUrl] = useState('')
+  const [popupProps, setPopupProps] = useState<{
+    message?: string | React.ReactElement
+    additionalMessage?: string
+    icon?: React.ReactElement
+    confirm?: () => void
+    cancel?: () => void
+    show?: boolean
+    showCloseButton?: boolean
+  }>({})
+  const popupRef = useRef<UiPopupHandlers>()
 
-//   const uploadFiles = async () => {
-//     const findLocal = assetPublish.assetFiles.find((file) => file.type === FileType.Local)
+  const resetValues = () => {
+    setAssetPublish({
+      name: '',
+      author: '',
+      description: '',
+      type: '',
+      category: 'None',
+      protocol: 'None',
+      network: 'None',
+      price: 0,
+      assetFiles: [],
+    })
+  }
 
-//     if (findLocal) {
-//       await handleAssetFiles(assetPublish.assetFiles)
-//     }
-//   }
+  useEffect(() => {
+    resetValues()
+  }, [])
 
   const generateFilesMetadata = () => {
     const files: FileMetadata[] = []
@@ -57,9 +75,9 @@ export const FilesStep: React.FC<FilesStepProps> = ({
     assetPublish.assetFiles.forEach((assetFile: AssetFile, i: number) => {
       files.push({
         index: i + 1,
-        contentType: assetFile.content_type ? assetFile.content_type : '',
+        contentType: assetFile.content_type || '',
         url: 'https://uploads5.wikiart.org/00268/images/william-holbrook-beard/the-bear-dance-1870.jpg',
-        contentLength: assetFile.size ? assetFile.size : '',
+        contentLength: assetFile.size || '',
       })
     })
 
@@ -86,13 +104,6 @@ export const FilesStep: React.FC<FilesStepProps> = ({
       },
       additionalInformation: {
         description: assetPublish.description,
-        // categories: [
-        //   `ProtocolType:${assetPublish.category}`,
-        //   `EventType:${assetPublish.protocol}`,
-        //   `Blockchain:${assetPublish.network}`,
-        //   `UseCase:defi-datasets`,
-        //   `Version:v1`,
-        // ],
         blockchain: assetPublish.network,
         version: 'v1',
         source: 'filecoin',
@@ -100,41 +111,6 @@ export const FilesStep: React.FC<FilesStepProps> = ({
     } as MetaData
 
     return metadata
-  }
-
-  const updateFilesAdded = (assetFile: AssetFile) => {
-    const arrayFiles: AssetFile[] = assetPublish.assetFiles
-    setAssetPublish({ ...assetPublish, assetFiles: [...arrayFiles, assetFile] })
-  }
-
-  const handleNewFile = function (e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target?.files?.length) {
-      return
-    }
-
-    const file = e.target.files[0]
-    const assetFile: AssetFile = {
-      type: FileType.Local,
-      name: file.name,
-      label: file.name,
-      size: String(file.size),
-      content_type: file.type,
-      file: file,
-    }
-    updateFilesAdded(assetFile)
-  }
-
-  const removeFile = (label: string) => {
-    const arrayFiles: AssetFile[] = assetPublish.assetFiles
-
-    const indexOfObject = arrayFiles.findIndex((assetFile) => {
-      return assetFile.label === label
-    })
-
-    if (indexOfObject !== -1) {
-      arrayFiles.splice(indexOfObject, 1)
-      setAssetPublish({ ...assetPublish, assetFiles: [...arrayFiles] })
-    }
   }
 
   const constructRewardMap = (
@@ -190,9 +166,16 @@ export const FilesStep: React.FC<FilesStepProps> = ({
 
   const publish = async () => {
     try {
+      setPopupProps({
+        message: 'Sending transactions to register the Asset in the network...',
+        additionalMessage:
+          'Please sign the transactions with Metamask. It could take some time to complete, but you will be notified when the Asset has been published.',
+        icon: <LoadingIcon />,
+      })
+
       const publisher = await getCurrentAccount(sdk)
       const rewardsRecipients: any[] = []
-      const assetRewardsMap = constructRewardMap(rewardsRecipients, 100, publisher.getId())
+      const assetRewardsMap = constructRewardMap(rewardsRecipients, 1, publisher.getId())
       const assetRewards = new AssetRewards(assetRewardsMap)
       const configContract = await loadNeverminedConfigContract(appConfig, publisher)
       const networkFee = await configContract.getMarketplaceFee()
@@ -227,77 +210,65 @@ export const FilesStep: React.FC<FilesStepProps> = ({
           erc20TokenAddress,
         })
 
-        toast.success('Asset published correctly in the Marketplace')
-        goToNextStep()
+        setPopupProps({
+          message: 'Asset published successfully in the Marketplace',
+          icon: <SuccessIcon />,
+          showCloseButton: true,
+        })
       } catch (error: any) {
         if (error.message.includes('Transaction was not mined within 50 blocks')) {
           setErrorAssetMessage(
             'Transaction was not mined within 50 blocks, but it might still be mined. Check later the Published Assets section in your Account',
           )
         }
-        toast.error(errorAssetMessage)
+
+        setPopupProps({
+          message: errorAssetMessage,
+          icon: <NeverminedAbstractIcon />,
+          showCloseButton: true,
+        })
       }
     } catch (error) {
       console.log('error', error)
     }
   }
 
-  const handleSubmitClick = async () => {
-    try {
-    //   await uploadFiles()
-      await publish()
-    } catch (error: any) {
-      setErrorAssetMessage(error.message)
-    }
-  }
+  const handleSubmitClick = useCallback(
+    async (e: React.SyntheticEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+
+      const errors: Record<string, string> = {}
+
+      if (!assetPublish.name) {
+        errors.name = 'Name is required'
+      }
+
+      setErrors(errors)
+
+      if (Object.keys(errors).length) {
+        return
+      }
+
+      try {
+        await publish()
+      } catch (error: any) {
+        setErrorAssetMessage(error.message)
+      }
+    },
+    [assetPublish, fileUrl, setErrors],
+  )
 
   return (
     <>
-      <div className={step('step-title')}>
-        <span className={step('step-title-icon')}>{currentStep}</span>
-        <span className={step('step-title-text')}>Asset File</span>
-      </div>
-      <div className={step('files-step')}>
-        <UiFormInput
-          id="computer"
-          className={step('step-form', ['file-upload'])}
-          type="file"
-          label={
-            <div className={b('upload-button')}>
-              <span className={b('upload-text')}>Upload file</span>
-              <DownloadIcon className={b('upload-icon')} />
-            </div>
-          }
-          onChange={handleNewFile}
-          placeholder="Select the file"
-        />
-        {assetPublish.assetFiles.length > 0 && (
-          <div className={b('files-container')}>
-            {assetPublish.assetFiles.map((assetfile) => (
-              <div className={b('files')} key={assetfile.label}>
-                <UiFormItem
-                  value={assetfile.label}
-                  onClick={() => removeFile(assetfile.label)}
-                  action={Action.Remove}
-                  actionIcon={(action) => (
-                    <>{action === 'remove' && <CrossIcon className={b('remove-icon')} />}</>
-                  )}
-                  disabled
-                  readOnly
-                />
-              </div>
-            ))}
-          </div>
-        )}
-        <div className={b('buttons-container')}>
-          <button type="submit" onClick={goToPrevStep} className={step('button', ['secondary'])}>
-            Back
-          </button>
-          <button onClick={handleSubmitClick} className={step('button')}>
-            Publish Asset
-          </button>
+      <form className="nft-publish">
+        <div>
+          <label htmlFor="name">Name</label>
+          <input id="name" type="input" />
         </div>
-      </div>
+        <button onClick={handleSubmitClick} className={b('button')}>
+          Publish Asset
+        </button>
+      </form>
     </>
   )
 }

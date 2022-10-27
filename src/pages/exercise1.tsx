@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { AppContext } from 'utils/app-context'
 
-export const POAP = () => {
+export const Exercise1 = () => {
+  const { isWalletConnected, enableNextStep } = useContext(AppContext)
+
+  useEffect(() => {
+    enableNextStep(isWalletConnected)
+  }, [isWalletConnected])
+
   return (
     <>
       {/* https://github.com/nevermined-io/nvm-one-widgets */}
