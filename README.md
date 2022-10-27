@@ -1,48 +1,24 @@
-# Create Nevermined React
+[![banner](https://raw.githubusercontent.com/nevermined-io/assets/main/images/logo/banner_logo.png)](https://nevermined.io)
 
-Create Nevermined React is a `getting started` template which includes an example with all 
-the functionalities needed to start developing your `dApp` with [Nevermined](https://nevermined.io/)
+# Nevermined Lisbon Workshop
 
-## Requirements
+```
+Time: 1st November 13.00 to 17.00
+Location: Arroz
+Eventbrite: https://www.eventbrite.com/e/nevermined-workshop-powering-a-new-era-of-web3-creative-economies-tickets-451611792027
+workshop presentation: 
+```
 
-- [nodejs](https://nodejs.org/en/)
-- Walletprovider (currently we only support [Metamask](https://metamask.io/))
+This is will a live coding session / hands-on workshop.
+The target audience are developers and we expect them to follow along on their individual laptops. 
 
-## How to install
+## Nice to have
 
-There is two ways to install the getting started template:
+- [node 16+](https://nodejs.org/en/)
+- [Metamask](https://metamask.io/) with a created account and connection to mumbai.
 
-1. Installing the script in your system
- 
-  * `npm i -g create-nevermined-react`
-  * `create-nevermined-react my-nevermined-dapp`
-
-2. With `npm init`
-
-  * `npm init nevermined-react my-nevermined-dapp`
-
-*Note:* You can overwrite `my-nevermined-dapp` by other name that you prefer
 
 ## Start the app
 
-1. `cd my-nevermined-dapp`
-2. `yarn && yarn start`
-
-## Workflow example
-
-The example included in the template covers the most used functionalities to work with NFT1155,
-for others assets or more info please see [the documentation](http://nvm-docs.nevermined.io/).
-
-**Requirements:** The accounts wallet used for the example need to have `Matic` and `USDC`
-
-1. Connect the wallet
-2. Click `Mint` button and approve transactions and sign authorization in the wallet
-3. As an owner once the token is minted the `Mint` button will change to `Download NFT`
-4. Click in `Download NFT` to get the example asset (in this case is a JSON file example)
-5. Change the account in the wallet
-6. Click in `Buy` button and approve transactions and sign authorization in the wallet
-7. As a buyer once the token is bought the `Buy` button will change to `Download NFT`
-8. Repeat the step 4
-
-*Warning:* The data is not persistent, once that the browser is reloaded the workflow example starts
-from the beginning again
+1. `yarn`
+2. `yarn start`

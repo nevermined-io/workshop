@@ -1,7 +1,7 @@
 {
   "name": "nevermined-workshop",
   "author": "Nevermined AG",
-  "version": "0.3.1",
+  "version": "0.0.1",
   "repository": {
     "url": "https://github.com/nevermined-io/workshop"
   },
@@ -17,7 +17,7 @@
     "clean": "rm -rf dist",
     "eject": "react-app-rewired eject",
     "ts:lint": "npx eslint . --ext .ts,.tsx",
-    "artifacts:download": "./scripts/download-artifacts.sh v2.1.0 mumbai"
+    "artifacts:download": "./scripts/download-artifacts.sh v2.1.0 mumbai public"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

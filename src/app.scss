@@ -1,12 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  color: #67cff9;
-  font-family: 'Titillium Web';
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
 }
 
 #root {
-  padding: 2em 3em 0 3em;
+  padding: 2em 3em;
   margin: auto;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 header {
@@ -30,7 +44,39 @@ header {
 }
 
 section {
-  margin-top: 3em;
+  flex: 1 0 auto;
+}
+
+footer {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  button {
+    font-size: 24px;
+    background: transparent;
+    border: 2px solid #000;
+    padding: 10px 20px;
+    color: #000;
+    cursor: pointer;
+
+    &:disabled {
+      border: 1px solid #999;
+      color: #999;
+      cursor: auto;
+    }
+  }
+
+  .navigation {
+    display: flex;
+    justify-content: center;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 h2 {
@@ -44,4 +90,29 @@ input,
 textarea,
 button {
   font-family: inherit;
+}
+
+.nft-list {
+  &__item {
+    display: flex;
+    margin-bottom: 0.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__data {
+    flex-grow: 1;
+    border: 1px solid #999;
+    margin-right: 1em;
+    padding: 0.25em 0.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__buy {
+    display: flex;
+  }
 }

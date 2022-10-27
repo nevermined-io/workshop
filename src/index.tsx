@@ -1,37 +1,47 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Example from 'examples'
-import { NftList } from 'pages/nft-list/nft-list'
-import { NftDetails } from 'pages/nft-details/nft-details'
-import { NftPublish } from 'pages/nft-publish/nft-publish'
 import { App } from 'app'
-import { NotFound } from 'pages/not-found/not-found'
+import { Exercise1 } from 'pages/exercise1'
+import { Exercise2 } from 'pages/exercise2'
+import { Exercise3 } from 'pages/exercise3'
+import { AppProvider } from 'utils/app-context'
+import { AssetService, Catalog } from '@nevermined-io/catalog-core'
+import { appConfig } from 'config/config'
+import { MetaMask } from '@nevermined-io/catalog-providers'
+import chainConfig, { mumbaiChainId } from 'config/chain_config'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <Catalog.NeverminedProvider config={appConfig} verbose={!!appConfig.verbose}>
+        <AssetService.AssetPublishProvider>
+          <MetaMask.WalletProvider
+            externalChainConfig={chainConfig}
+            correctNetworkId={mumbaiChainId}
+            nodeUri={String(appConfig.nodeUri)}
+          >
+            <AppProvider>
+              <App />
+            </AppProvider>
+          </MetaMask.WalletProvider>
+        </AssetService.AssetPublishProvider>
+      </Catalog.NeverminedProvider>
+    ),
     children: [
       {
-        path: 'nft/publish',
-        element: <NftPublish />,
+        index: true,
+        path: 'exercise1',
+        element: <Exercise1 />,
       },
       {
-        path: 'nft/:did',
-        element: <NftDetails />,
+        path: 'exercise2',
+        element: <Exercise2 />,
       },
       {
-        path: 'nfts',
-        element: <NftList />,
-      },
-      {
-        path: '/example',
-        element: <Example />,
-      },
-      {
-        path: '*',
-        element: <NotFound />,
+        path: 'exercise3',
+        element: <Exercise3 />,
       },
     ],
   },
