@@ -149,7 +149,7 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
             type="number"
             min="1"
             max="10"
-            value="1"
+            value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
           />
         </div>

@@ -5,10 +5,15 @@ export const Exercise1 = () => {
   const { isWalletConnected, enableNextStep } = useContext(AppContext)
 
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'http://localhost:8080/widget-poap.js'
-    script.defer = true
-    document.body.appendChild(script)
+    [
+      'https://unpkg.com/widget-poap@0.0.5/452.js',
+      'https://unpkg.com/widget-poap@0.0.5/widget-poap.js',
+    ].forEach((s) => {
+      const script = document.createElement('script')
+      script.src = s
+      script.defer = true
+      document.body.appendChild(script)
+    })
   }, [])
 
   useEffect(() => {
