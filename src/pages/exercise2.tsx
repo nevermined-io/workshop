@@ -39,17 +39,7 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
     publishNFT1155,
   } = AssetService.useAssetPublish()
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [fileUrl, setFileUrl] = useState('')
-  const [popupProps, setPopupProps] = useState<{
-    message?: string | React.ReactElement
-    additionalMessage?: string
-    icon?: React.ReactElement
-    confirm?: () => void
-    cancel?: () => void
-    show?: boolean
-    showCloseButton?: boolean
-  }>({})
-  const popupRef = useRef<UiPopupHandlers>()
+  const [quantity, setQuantity] = useState('1')
 
   const resetValues = () => {
     setAssetPublish({
@@ -69,21 +59,6 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
     resetValues()
   }, [])
 
-  const generateFilesMetadata = () => {
-    const files: FileMetadata[] = []
-
-    assetPublish.assetFiles.forEach((assetFile: AssetFile, i: number) => {
-      files.push({
-        index: i + 1,
-        contentType: assetFile.content_type || '',
-        url: 'https://uploads5.wikiart.org/00268/images/william-holbrook-beard/the-bear-dance-1870.jpg',
-        contentLength: assetFile.size || '',
-      })
-    })
-
-    return files
-  }
-
   const generateMetadata = () => {
     const metadata = {
       curation: {
@@ -100,7 +75,14 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
         datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         type: 'dataset',
         network: assetPublish.network,
-        files: generateFilesMetadata(),
+        files: [
+          {
+            index: 1,
+            contentType: '',
+            url: 'https://uploads5.wikiart.org/00268/images/william-holbrook-beard/the-bear-dance-1870.jpg',
+            contentLength: '',
+          },
+        ],
       },
       additionalInformation: {
         description: assetPublish.description,
@@ -166,13 +148,6 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
 
   const publish = async () => {
     try {
-      setPopupProps({
-        message: 'Sending transactions to register the Asset in the network...',
-        additionalMessage:
-          'Please sign the transactions with Metamask. It could take some time to complete, but you will be notified when the Asset has been published.',
-        icon: <LoadingIcon />,
-      })
-
       const publisher = await getCurrentAccount(sdk)
       const rewardsRecipients: any[] = []
       const assetRewardsMap = constructRewardMap(rewardsRecipients, 1, publisher.getId())
@@ -205,15 +180,9 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
           metadata: generateMetadata(),
           nftAmount: BigNumber.from(1),
           preMint: true,
-          cap: BigNumber.from(100),
+          cap: BigNumber.from(quantity),
           royaltyAttributes,
           erc20TokenAddress,
-        })
-
-        setPopupProps({
-          message: 'Asset published successfully in the Marketplace',
-          icon: <SuccessIcon />,
-          showCloseButton: true,
         })
       } catch (error: any) {
         if (error.message.includes('Transaction was not mined within 50 blocks')) {
@@ -221,12 +190,6 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
             'Transaction was not mined within 50 blocks, but it might still be mined. Check later the Published Assets section in your Account',
           )
         }
-
-        setPopupProps({
-          message: errorAssetMessage,
-          icon: <NeverminedAbstractIcon />,
-          showCloseButton: true,
-        })
       }
     } catch (error) {
       console.log('error', error)
@@ -243,8 +206,6 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
         errors.name = 'Name is required'
       }
 
-      setErrors(errors)
-
       if (Object.keys(errors).length) {
         return
       }
@@ -255,7 +216,7 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
         setErrorAssetMessage(error.message)
       }
     },
-    [assetPublish, fileUrl, setErrors],
+    [assetPublish, setErrors],
   )
 
   return (
@@ -263,7 +224,17 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
       <form className="nft-publish">
         <div>
           <label htmlFor="name">Name</label>
-          <input id="name" type="input" />
+          <input id="name" type="input" onChange={(e) => handleChange(e.target.value, 'name')} />
+        </div>
+        <div>
+          <label htmlFor="quantity">Quantity</label>
+          <input
+            type="number"
+            min="1"
+            max="10"
+            value="1"
+            onChange={(e) => setQuantity(e.target.value)}
+          />
         </div>
         <button onClick={handleSubmitClick} className={b('button')}>
           Publish Asset
