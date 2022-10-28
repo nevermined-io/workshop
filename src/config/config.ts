@@ -20,10 +20,11 @@ export const appConfig: Config = {
     typeof window !== 'undefined' ? window.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
   gatewayUri,
   faucetUri,
-  verbose: true,
+  verbose: 2,
   gatewayAddress,
   graphHttpUri,
   marketplaceAuthToken: AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token,
   marketplaceUri,
   artifactsFolder: `${rootUri}/contracts`,
+  newGateway: true,
 }
