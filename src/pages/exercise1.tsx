@@ -6,8 +6,8 @@ export const Exercise1 = () => {
 
   useEffect(() => {
     [
-      'https://unpkg.com/widget-poap@0.0.5/452.js',
-      'https://unpkg.com/widget-poap@0.0.5/widget-poap.js',
+      'https://unpkg.com/widget-poap@0.0.6/452.js',
+      'https://unpkg.com/widget-poap@0.0.6/widget-poap.js',
     ].forEach((s) => {
       const script = document.createElement('script')
       script.src = s
@@ -24,7 +24,7 @@ export const Exercise1 = () => {
     <>
       <div
         id="poap-widget"
-        nvm-did="did:nv:2c66b9b65c71951b0c5155bfe6c374d68cc7483d715b11e27a39f286ca3d0722"
+        nvm-did="did:nv:c6ad11d31da9baeebf2b827a0bbe6c3883c5de2b764d0fc48ed4ef5dfa249ba6"
       ></div>
     </>
   )

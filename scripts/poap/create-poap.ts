@@ -112,23 +112,33 @@ export const getMetadata = (
       Logger.log('Deploying POAP contract')
       TestContractHandler.setConfig(appConfig)
       poapContract = await TestContractHandler.deployArtifact(POAPUpgradeable, account.getId())
+
+      Logger.log(`Approving contract with address: ${poapContract.address}...`)
+      await poapContract.setApprovalForAll(gatewayAddress, true, {
+        from: account.getId(),
+      })
+
+      Logger.log('Adding minter...')
+      await poapContract.addMinter(sdk.keeper.conditions.transferNft721Condition.address, {
+        from: account.getId(),
+      })
     } else {
       Logger.log(`Using created POAP contract ${CONTRACT_ADDRESS}`)
       poapContract = new ethers.Contract(CONTRACT_ADDRESS, POAPUpgradeable.abi, wallet)
     }
 
-    const paopAddress = poapContract.address
-    Logger.log(`Approving contract with address: ${paopAddress}...`)
+    const assetRewards = new AssetRewards(account.getId(), BigNumber.from(0))
 
-    await poapContract.setApprovalForAll(gatewayAddress, true, {
-      from: account.getId(),
-    })
+    const networkFee = await sdk.keeper.nvmConfig.getNetworkFee()
+    const feeReceiver = await sdk.keeper.nvmConfig.getFeeReceiver()
+
+    assetRewards.addNetworkFees(feeReceiver, BigNumber.from(networkFee))
 
     Logger.log('Creating NFT721...')
     const poapDDO = await sdk.assets.createNft721(
       metadata,
       account,
-      new AssetRewards(account.getId(), BigNumber.from(0)),
+      assetRewards,
       'PSK-RSA',
       poapContract.address,
       erc20TokenAddress,
