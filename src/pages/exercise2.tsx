@@ -136,8 +136,8 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
   )
 
   return (
-    <>
-      <form className="nft-publish">
+    <div className="nft-publish">
+      <form>
         <div>
           <label htmlFor="name">Name</label>
           <input id="name" type="input" onChange={(e) => handleChange(e.target.value, 'name')} />
@@ -152,8 +152,10 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
             onChange={(e) => setQuantity(e.target.value)}
           />
         </div>
-        <button onClick={handleSubmitClick}>Publish Asset</button>
+        <div className="publish-button">
+          <button onClick={handleSubmitClick}>Publish Asset</button>
+        </div>
       </form>
-    </>
+    </div>
   )
 }

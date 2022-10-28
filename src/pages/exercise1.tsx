@@ -21,11 +21,11 @@ export const Exercise1 = () => {
   }, [isWalletConnected])
 
   return (
-    <>
+    <div className="widget">
       <div
         id="poap-widget"
         nvm-did="did:nv:c6ad11d31da9baeebf2b827a0bbe6c3883c5de2b764d0fc48ed4ef5dfa249ba6"
       ></div>
-    </>
+    </div>
   )
 }
