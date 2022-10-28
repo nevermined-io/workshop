@@ -6,7 +6,7 @@ export const Exercise1 = () => {
 
   useEffect(() => {
     [
-      '/lib/452.js',
+      '/lib/685.js',
       '/lib/widget-poap.js',
     ].forEach((s) => {
       const script = document.createElement('script')
@@ -14,7 +14,12 @@ export const Exercise1 = () => {
       script.defer = true
       document.body.appendChild(script)
     })
-  }, [])
+
+    const link = document.createElement('link')
+    link.href = '/lib/widget-poap.css'
+    link.rel = "stylesheet"
+    document.head.appendChild(link)
+  },[])
 
   useEffect(() => {
     enableNextStep(isWalletConnected)
@@ -23,7 +28,7 @@ export const Exercise1 = () => {
   return (
     <div className="widget">
       <div
-        id="poap-widget"
+        id="nvm-poap-widget"
         nvm-did="did:nv:c6ad11d31da9baeebf2b827a0bbe6c3883c5de2b764d0fc48ed4ef5dfa249ba6"
       ></div>
     </div>
