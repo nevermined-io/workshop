@@ -59,7 +59,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@metamask/providers": "^8.1.1",
-    "@nevermined-io/nevermined-sdk-js": "0.25.0",
+    "@nevermined-io/nevermined-sdk-js": "^0.25.0",
     "@react-mock/state": "^0.1.8",
     "@types/lodash.uniqby": "^4.7.6",
     "@types/node": "^12.0.0",

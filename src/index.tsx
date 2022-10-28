@@ -20,6 +20,8 @@ const Layout = () => {
     connectWallet,
     goToNextStep,
     goToPreviousStep,
+    poapsOwned,
+    nftsOwned,
   } = useContext(AppContext)
 
   return (
@@ -34,6 +36,9 @@ const Layout = () => {
             Next
           </button>
         </div>
+        <p>POAPs owned: {poapsOwned}</p>
+        <p>NFTs owned: {nftsOwned}</p>
+
         {!isWalletConnected && (
           <div className="actions">
             <button onClick={connectWallet}>Connect to Nevermined</button>
