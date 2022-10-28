@@ -60,6 +60,11 @@ footer {
     padding: 10px 20px;
     color: #000;
     cursor: pointer;
+    margin-right: 1em;
+
+    &:last-child {
+      margin-right: 0;
+    }
 
     &:disabled {
       border: 1px solid #999;

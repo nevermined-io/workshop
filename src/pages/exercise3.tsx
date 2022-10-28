@@ -1,7 +1,7 @@
 import { BigNumber, Catalog, DDO, getCurrentAccount } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
-import React, { useEffect, useMemo, useState } from 'react'
-
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { AppContext } from 'utils/app-context'
 import { type AssetInfo, mapDdoToAsset } from 'utils/utils'
 
 const pageSize = 20
@@ -66,10 +66,15 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
 export const Exercise3: React.FC<NftListProps> = () => {
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
+  const { enableNextStep } = useContext(AppContext)
   const [assets, setAssets] = useState<AssetInfo[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasLoaded, setHasLoaded] = useState(false)
   const isSdkAvailable = useMemo(() => sdk && Object.keys(sdk).length > 0, [sdk])
+
+  useEffect(() => {
+    enableNextStep(false)
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {

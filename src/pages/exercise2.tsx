@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
   AssetService,
   BigNumber,
@@ -10,10 +9,8 @@ import {
   RoyaltyKind,
 } from '@nevermined-io/catalog-core'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
-import { BEM } from '@nevermined-io/styles'
 import { appConfig, erc20TokenAddress } from 'config/config'
-
-const b = BEM('nft-publish', {})
+import { AppContext } from 'utils/app-context'
 
 type NftPublishProps = unknown
 
@@ -21,7 +18,8 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
   const { account, sdk } = Catalog.useNevermined()
   const { assetPublish, handleChange, setErrorAssetMessage, setAssetPublish, publishNFT1155 } =
     AssetService.useAssetPublish()
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const { enableNextStep } = useContext(AppContext)
+  const [_, setErrors] = useState<Record<string, string>>({})
   const [quantity, setQuantity] = useState('1')
 
   const resetValues = () => {
@@ -40,6 +38,7 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
 
   useEffect(() => {
     resetValues()
+    enableNextStep(true)
   }, [])
 
   const generateMetadata = () => {
@@ -153,9 +152,7 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
             onChange={(e) => setQuantity(e.target.value)}
           />
         </div>
-        <button onClick={handleSubmitClick} className={b('button')}>
-          Publish Asset
-        </button>
+        <button onClick={handleSubmitClick}>Publish Asset</button>
       </form>
     </>
   )

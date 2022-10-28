@@ -7,7 +7,7 @@ const polygonLocalnetChainId = zeroX((8997).toString(16))
 export const mumbaiChainId = zeroX((80001).toString(16))
 const mainnetChainId = zeroX((137).toString(16))
 
-const ChainConfig = {
+export const chainConfig = {
   development: {
     chainId: acceptedChainIdHex === spreeChainId ? spreeChainId : polygonLocalnetChainId,
     chainName: 'Localhost development',
@@ -49,16 +49,14 @@ const ChainConfig = {
   },
   returnConfig: (chainIdHex: string) => {
     if (chainIdHex === spreeChainId || chainIdHex === polygonLocalnetChainId) {
-      return ChainConfig.development
+      return chainConfig.development
     }
     if (chainIdHex === mumbaiChainId) {
-      return ChainConfig.mumbai
+      return chainConfig.mumbai
     }
     if (chainIdHex === mainnetChainId) {
-      return ChainConfig.mainnet
+      return chainConfig.mainnet
     }
-    return ChainConfig.development
+    return chainConfig.development
   },
 }
-
-export default ChainConfig
