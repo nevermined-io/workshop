@@ -6,8 +6,8 @@ export const Exercise1 = () => {
 
   useEffect(() => {
     [
-      'https://unpkg.com/widget-poap@0.0.6/452.js',
-      'https://unpkg.com/widget-poap@0.0.6/widget-poap.js',
+      '/lib/452.js',
+      '/lib/widget-poap.js',
     ].forEach((s) => {
       const script = document.createElement('script')
       script.src = s
