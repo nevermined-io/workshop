@@ -8,7 +8,7 @@ Location: Arroz Estúdios
 Eventbrite: https://www.eventbrite.com/e/nevermined-workshop-powering-a-new-era-of-web3-creative-economies-tickets-451611792027
 ```
 
-> workshop slides: [here](./slides.pdf)
+> workshop slides: [here](./resources/slides.pdf)
 
 
 This will be a live coding session / hands-on workshop.
