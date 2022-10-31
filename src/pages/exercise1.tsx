@@ -1,9 +1,13 @@
 import React, { useContext, useEffect } from 'react'
 import { AppContext } from 'utils/app-context'
-import 'utils/widget-poap'
+import loadPoapWidget from 'utils/widget-poap'
 
 export const Exercise1 = () => {
   const { isWalletConnected, enableNextStep, poapsOwned } = useContext(AppContext)
+
+  useEffect(() => {
+    loadPoapWidget()
+  }, [])
 
   useEffect(() => {
     // enable next step based on the number of POAPs

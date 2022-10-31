@@ -1,4 +1,4 @@
-;(function () {
+module.exports = function loadPoapWidget() {
   var regex = /\.([0-9a-z]+)(?:[\?#]|$)/i
   var files = [
     '/lib/5b77e34/index.css',
@@ -27,4 +27,4 @@
       }
     }
   }
-})()
+}
