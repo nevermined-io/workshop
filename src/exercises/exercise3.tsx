@@ -2,7 +2,6 @@
 import { BigNumber, Catalog, DDO, getCurrentAccount } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { solution3 } from 'solutions/exercise3'
 import { AppContext } from 'utils/app-context'
 import { type AssetInfo, mapDdoToAsset } from 'utils/utils'
 

@@ -12,7 +12,6 @@ import {
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import { appConfig, erc20TokenAddress } from 'config/config'
 import { AppContext } from 'utils/app-context'
-import { solution2 } from 'solutions/exercise2'
 
 type NftPublishProps = unknown
 
