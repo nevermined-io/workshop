@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
   AssetService,
@@ -43,77 +44,6 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
     enableNextStep(nftsOwned > 0)
   }, [nftsOwned])
 
-  const generateMetadata = () => {
-    const metadata = {
-      main: {
-        name: assetPublish.name,
-        dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-        author: 'Some author',
-        license: 'No License Specified',
-        datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-        type: 'dataset',
-        files: [
-          {
-            index: 0,
-            contentType: '',
-            url: 'https://uploads5.wikiart.org/00268/images/william-holbrook-beard/the-bear-dance-1870.jpg',
-            contentLength: '',
-          },
-        ],
-      },
-      additionalInformation: {
-        description: '',
-      },
-    } as MetaData
-
-    return metadata
-  }
-
-  const publish = async () => {
-    try {
-      const publisher = await getCurrentAccount(sdk)
-      const assetRewards = new AssetRewards(publisher.getId(), BigNumber.from(0))
-      const networkFee = await sdk.keeper.nvmConfig.getNetworkFee()
-      const feeReceiver = await sdk.keeper.nvmConfig.getFeeReceiver()
-
-      assetRewards.addNetworkFees(feeReceiver, BigNumber.from(networkFee))
-
-      const royaltyAttributes = {
-        royaltyKind: RoyaltyKind.Standard,
-        scheme: getRoyaltyScheme(sdk, RoyaltyKind.Standard),
-        amount: 0,
-      }
-
-      if (
-        !account.isTokenValid() ||
-        account.getAddressTokenSigner().toLowerCase() !== publisher.getId().toLowerCase()
-      ) {
-        await account.generateToken()
-      }
-
-      try {
-        await publishNFT1155({
-          gatewayAddress: String(appConfig.gatewayAddress),
-          assetRewards,
-          metadata: generateMetadata(),
-          nftAmount: BigNumber.from(1),
-          preMint: true,
-          cap: BigNumber.from(quantity),
-          royaltyAttributes,
-          erc20TokenAddress,
-        })
-      } catch (error: any) {
-        if (error.message.includes('Transaction was not mined within 50 blocks')) {
-          setErrorAssetMessage(
-            'Transaction was not mined within 50 blocks, but it might still be mined. Check later the Published Assets section in your Account',
-          )
-        }
-      }
-    } catch (error) {
-      console.log('error', error)
-    }
-  }
-
   const handleSubmitClick = useCallback(
     async (e: React.SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault()
@@ -129,7 +59,13 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
       }
 
       try {
-        await publish()
+        /**
+         *
+         * Add your code here for exercise 2.
+         * Implement publish function
+         *
+         * await PUBLISH...
+         */
       } catch (error: any) {
         setErrorAssetMessage(error.message)
       }
