@@ -18,7 +18,7 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
   const { account, sdk } = Catalog.useNevermined()
   const { assetPublish, handleChange, setErrorAssetMessage, setAssetPublish, publishNFT1155 } =
     AssetService.useAssetPublish()
-  const { enableNextStep } = useContext(AppContext)
+  const { enableNextStep, nftsOwned } = useContext(AppContext)
   const [_, setErrors] = useState<Record<string, string>>({})
   const [quantity, setQuantity] = useState('1')
 
@@ -38,8 +38,10 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
 
   useEffect(() => {
     resetValues()
-    enableNextStep(true)
-  }, [])
+
+    // enable next step based on the number of NFTs
+    enableNextStep(nftsOwned > 0)
+  }, [nftsOwned])
 
   const generateMetadata = () => {
     const metadata = {

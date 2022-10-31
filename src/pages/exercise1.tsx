@@ -1,29 +1,14 @@
 import React, { useContext, useEffect } from 'react'
 import { AppContext } from 'utils/app-context'
+import 'utils/widget-poap'
 
 export const Exercise1 = () => {
-  const { isWalletConnected, enableNextStep } = useContext(AppContext)
+  const { isWalletConnected, enableNextStep, poapsOwned } = useContext(AppContext)
 
   useEffect(() => {
-    [
-      '/lib/685.js',
-      '/lib/widget-poap.js',
-    ].forEach((s) => {
-      const script = document.createElement('script')
-      script.src = s
-      script.defer = true
-      document.body.appendChild(script)
-    })
-
-    const link = document.createElement('link')
-    link.href = '/lib/widget-poap.css'
-    link.rel = "stylesheet"
-    document.head.appendChild(link)
-  },[])
-
-  useEffect(() => {
-    enableNextStep(isWalletConnected)
-  }, [isWalletConnected])
+    // enable next step based on the number of POAPs
+    enableNextStep(isWalletConnected && poapsOwned > 0)
+  }, [isWalletConnected, poapsOwned])
 
   return (
     <div className="widget">

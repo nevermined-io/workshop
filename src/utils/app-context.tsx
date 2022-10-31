@@ -82,13 +82,6 @@ export const AppProvider = ({ children }: { children: any }) => {
     getPoapOwned().catch(console.error)
   }, [walletAddress, isLoadingSDK])
 
-  // enable next step based on the number of poaps
-  useEffect(() => {
-    if (poapsOwned > 0) {
-      enableNextStep(true)
-    }
-  }, [poapsOwned])
-
   // Get owned nfts
   useEffect(() => {
     if (!walletAddress || isLoadingSDK) {
