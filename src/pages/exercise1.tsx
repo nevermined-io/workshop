@@ -14,6 +14,14 @@ export const Exercise1 = () => {
     enableNextStep(isWalletConnected && poapsOwned > 0)
   }, [isWalletConnected, poapsOwned])
 
+  /**
+   *
+   * Add your code here for exercise 1
+   *
+   *
+   */
+
+  // This is what they need to implement and should be moved to src/utils/solutions/exercise1.tsx
   return (
     <div className="widget">
       <div

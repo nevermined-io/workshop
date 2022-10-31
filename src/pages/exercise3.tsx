@@ -23,6 +23,15 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
     })()
   }, [walletAddress, isBought])
 
+
+  /**
+   *
+   * Add your code here for exercise 3
+   * - Implement buy
+   * - Implement download
+   *
+   */
+  // TODO: Move the buy and download code to src/utils/solutions/exercise3.tsx
   const handleBuyClick = async () => {
     const currentAccount = await getCurrentAccount(sdk)
     if (

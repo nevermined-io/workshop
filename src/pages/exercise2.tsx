@@ -69,6 +69,13 @@ export const Exercise2: React.FC<NftPublishProps> = () => {
     return metadata
   }
 
+  /**
+   *
+   * Add your code here for exercise 2.
+   * Implement publish function
+   *
+   */
+  // TODO: move the contents of publish to src/utils/solutions/exercise2.tsx
   const publish = async () => {
     try {
       const publisher = await getCurrentAccount(sdk)
