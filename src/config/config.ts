@@ -13,7 +13,7 @@ export const erc20TokenAddress = '0xe11a86849d99f524cac3e7a0ec1241828e332c62'
 export const nodeUri = 'https://matic-mumbai.chainstacklabs.com'
 export const filecoinUploadUri = '/api/v1/gateway/services/upload/filecoin'
 export const nftAddress = '0xAE04cD6F0d4026238AF24729640d6952a8649eea'
-export const poapDIDZeroX = '0xc6ad11d31da9baeebf2b827a0bbe6c3883c5de2b764d0fc48ed4ef5dfa249ba6'
+export const poapDIDZeroX = '0x586a7fece25c9bff23b72f257ce2ab1495778921dedeb2a416dbbe07d62cc223'
 
 export const appConfig: Config = {
   web3Provider:

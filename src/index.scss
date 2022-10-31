@@ -103,6 +103,15 @@ button {
   align-items: center;
   font-size: 25px;
 
+  .poap-widget {
+    display: flex;
+    flex-direction: column;
+
+    img {
+      margin-bottom: 1em;
+    }
+  }
+
   button {
     font-size: inherit;
   }

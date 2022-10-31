@@ -15,7 +15,7 @@ export const Solution1 = () => {
   return (
     <div
       id="nvm-poap-widget"
-      nvm-did="did:nv:c6ad11d31da9baeebf2b827a0bbe6c3883c5de2b764d0fc48ed4ef5dfa249ba6"
+      nvm-did="did:nv:586a7fece25c9bff23b72f257ce2ab1495778921dedeb2a416dbbe07d62cc223"
     ></div>
   )
 }
