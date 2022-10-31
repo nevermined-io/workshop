@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BigNumber, Catalog, DDO, getCurrentAccount } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { solution3 } from 'solutions/exercise3'
 import { AppContext } from 'utils/app-context'
 import { type AssetInfo, mapDdoToAsset } from 'utils/utils'
 
 const pageSize = 20
-
-type NftListProps = unknown
 
 const BuyAsset = ({ ddo }: { ddo: DDO }) => {
   const { assets, account, isLoadingSDK, subscription, sdk } = Catalog.useNevermined()
@@ -23,36 +23,21 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
     })()
   }, [walletAddress, isBought])
 
-
-  /**
-   *
-   * Add your code here for exercise 3
-   * - Implement buy
-   * - Implement download
-   *
-   */
-  // TODO: Move the buy and download code to src/utils/solutions/exercise3.tsx
   const handleBuyClick = async () => {
-    const currentAccount = await getCurrentAccount(sdk)
-    if (
-      !account.isTokenValid() ||
-      account.getAddressTokenSigner().toLowerCase() !== currentAccount.getId().toLowerCase()
-    ) {
-      await account.generateToken()
-    }
-
-    const response = await subscription.buySubscription(
-      ddo.id,
-      currentAccount,
-      owner,
-      BigNumber.from(1),
-      1155,
-    )
-    setIsBought(Boolean(response))
+    /**
+     *
+     * Implement and add your code here for purchasing a DDO
+     * const response = await BUY...
+     * setIsBought(Boolean(response))
+     */
   }
 
   const handleDownloadClick = async () => {
-    await assets.downloadNFT(ddo.id)
+    /**
+     *
+     * Implement and add your code here for downloading a DDO
+     *
+     */
   }
 
   return (
@@ -72,7 +57,7 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
   )
 }
 
-export const Exercise3: React.FC<NftListProps> = () => {
+export const Exercise3 = () => {
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
   const { enableNextStep } = useContext(AppContext)

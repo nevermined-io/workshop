@@ -7,9 +7,9 @@ import { appConfig } from 'config/config'
 import { chainConfig, mumbaiChainId } from 'config/chain_config'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { AppContext } from 'utils/app-context'
-import { Exercise1 } from 'pages/exercise1'
-import { Exercise2 } from 'pages/exercise2'
-import { Exercise3 } from 'pages/exercise3'
+import { Exercise1 } from 'exercises/exercise1'
+import { Exercise2 } from 'exercises/exercise2'
+import { Exercise3 } from 'exercises/exercise3'
 import './index.scss'
 
 const Layout = () => {
