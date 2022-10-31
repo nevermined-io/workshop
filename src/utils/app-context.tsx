@@ -91,7 +91,7 @@ export const AppProvider = ({ children }: { children: any }) => {
 
     console.log('walletAddress: ', walletAddress)
     const getNftOwned = async () => {
-      const eventOptions = {
+      const eventOptionsBought = {
         methodName: 'getFulfilleds',
         filterSubgraph: {
           where: {
@@ -99,16 +99,36 @@ export const AppProvider = ({ children }: { children: any }) => {
           },
         },
         result: {
-          id: true,
+          _did: true,
         },
       }
 
-      const events = await sdk.keeper.conditions.transferNftCondition.events.once(
+      const eventOptionsMinted = {
+        methodName: 'getDIDAttributeRegistereds',
+        filterSubgraph: {
+          where: {
+            _owner: walletAddress,
+          },
+        },
+        result: {
+          _did: true,
+        },
+      }
+
+      const eventsMinted = await sdk.keeper.didRegistry.events.once(
         (e) => e,
-        eventOptions,
+        eventOptionsMinted,
       )
-      console.log('events', events, events.length)
-      setNftsOwned(events.length)
+
+      console.log('eventsMinted', eventsMinted)
+      setNftsOwned(eventsMinted.length)
+
+      const eventsBought = await sdk.keeper.conditions.transferNftCondition.events.once(
+        (e) => e,
+        eventOptionsBought,
+      )
+      console.log('eventsBought', eventsBought)
+      setNftsOwned(eventsMinted.length + eventsBought.length)
     }
 
     getNftOwned().catch(console.error)
