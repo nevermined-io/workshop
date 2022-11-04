@@ -5,11 +5,16 @@
  */
 
 import React, { useEffect } from 'react'
-import loadPoapWidget from 'utils/poap-widget'
 
 export const Solution1 = () => {
   useEffect(() => {
-    loadPoapWidget()
+    const script = document.createElement('script')
+    script.src = 'http://localhost:8080/poap-widget-loader.js'
+    script.defer = true
+
+    const widgetNode = document.getElementById('nvm-poap-widget')
+    const widgetParentNode = widgetNode?.parentNode
+    widgetParentNode?.insertBefore(script, widgetNode)
   }, [])
 
   return (
