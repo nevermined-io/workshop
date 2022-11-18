@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useCallback, useEffect, useState } from 'react'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet, Wagmi } from '@nevermined-io/catalog-providers'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { poapDIDZeroX } from 'config/config'
 
 export const AppContext = React.createContext({
   isWalletConnected: false,
-  connectWallet: () => {},
   isPreviousStepEnabled: false,
   isNextStepEnabled: false,
   enableNextStep: (value: boolean) => {},
@@ -20,7 +19,7 @@ export const AppContext = React.createContext({
 
 export const AppProvider = ({ children }: { children: any }) => {
   const { isLoadingSDK, sdk } = Catalog.useNevermined()
-  const { loginMetamask, walletAddress } = MetaMask.useWallet()
+  const { walletAddress } = useWallet()
   const navigate = useNavigate()
   const location = useLocation()
   const [isPreviousStepEnabled, enablePreviousStep] = useState(false)
@@ -158,7 +157,6 @@ export const AppProvider = ({ children }: { children: any }) => {
     <AppContext.Provider
       value={{
         isWalletConnected,
-        connectWallet: loginMetamask,
         isPreviousStepEnabled,
         isNextStepEnabled,
         enableNextStep,

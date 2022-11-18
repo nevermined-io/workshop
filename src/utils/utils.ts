@@ -1,5 +1,5 @@
 import type { MetaData, DDO, BigNumber, Nevermined } from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { WagmiCore } from '@nevermined-io/catalog-providers'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { categoryPrefix, networkPrefix, subcategoryPrefix } from './constants'
 
@@ -48,7 +48,7 @@ export const getFeesFromBigNumber = (fees: BigNumber): string => {
 
 export const loadAssetProvenance = async (
   sdk: Nevermined,
-  provider: MetaMask.MetamaskProvider,
+  provider: WagmiCore.Provider,
   did: string,
 ): Promise<any | undefined> => {
   let useds = sdk.keeper.didRegistry.events.getPastEvents({
