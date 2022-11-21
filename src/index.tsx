@@ -2,22 +2,22 @@ import React, { useContext } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom'
 import { AppProvider } from 'utils/app-context'
-import { AssetService, Catalog } from '@nevermined-io/catalog-core'
+import { AssetService, Catalog, Logger } from '@nevermined-io/catalog-core'
 import { appConfig } from 'config/config'
-import { chainConfig, mumbaiChainId } from 'config/chain_config'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { WalletProvider, getClient, ConnectKit } from '@nevermined-io/catalog-providers'
 import { AppContext } from 'utils/app-context'
 import { Exercise1 } from 'exercises/exercise1'
 import { Exercise2 } from 'exercises/exercise2'
 import { Exercise3 } from 'exercises/exercise3'
 import './index.scss'
 
+Logger.setLevel(3)
+
 const Layout = () => {
   const {
     isPreviousStepEnabled,
     isNextStepEnabled,
     isWalletConnected,
-    connectWallet,
     goToNextStep,
     goToPreviousStep,
     poapsOwned,
@@ -41,7 +41,7 @@ const Layout = () => {
 
         {!isWalletConnected && (
           <div className="actions">
-            <button onClick={connectWallet}>Connect to Nevermined</button>
+            <ConnectKit.ConnectKitButton/>
           </div>
         )}
       </footer>
@@ -53,10 +53,9 @@ const App = () => {
   return (
     <Catalog.NeverminedProvider config={appConfig} verbose={!!appConfig.verbose}>
       <AssetService.AssetPublishProvider>
-        <MetaMask.WalletProvider
-          externalChainConfig={chainConfig}
-          correctNetworkId={mumbaiChainId}
-          nodeUri={String(appConfig.nodeUri)}
+        <WalletProvider
+          correctNetworkId={80001}
+          client={getClient()}
         >
           <BrowserRouter>
             <Routes>
@@ -76,7 +75,7 @@ const App = () => {
               </Route>
             </Routes>
           </BrowserRouter>
-        </MetaMask.WalletProvider>
+        </WalletProvider>
       </AssetService.AssetPublishProvider>
     </Catalog.NeverminedProvider>
   )

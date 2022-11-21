@@ -5,31 +5,20 @@
  */
 
 import {
-  AccountModule,
   AssetsModule,
   BigNumber,
   DDO,
-  getCurrentAccount,
   Nevermined,
-  SubscriptionActions,
+  NFTSModule,
 } from '@nevermined-io/catalog-core'
 
 const buy = async (
   sdk: Nevermined,
-  account: AccountModule,
-  subscription: SubscriptionActions,
+  nfts: NFTSModule,
   ddo: DDO,
   owner: string,
 ) => {
-  const currentAccount = await getCurrentAccount(sdk)
-  if (
-    !account.isTokenValid() ||
-    account.getAddressTokenSigner().toLowerCase() !== currentAccount.getId().toLowerCase()
-  ) {
-    await account.generateToken()
-  }
-
-  return subscription.buySubscription(ddo.id, currentAccount, owner, BigNumber.from(1), 1155)
+  return nfts.access(ddo.id, owner, BigNumber.from(1), 1155)
 }
 
 const download = (assets: AssetsModule, ddo: DDO) => assets.downloadNFT(ddo.id)

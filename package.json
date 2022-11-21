@@ -34,8 +34,8 @@
     ]
   },
   "dependencies": {
-    "@nevermined-io/catalog-core": "0.3.1",
-    "@nevermined-io/catalog-providers": "0.3.1",
+    "@nevermined-io/catalog-core": "0.6.1",
+    "@nevermined-io/catalog-providers": "0.6.1",
     "@nevermined-io/styles": "^0.1.9",
     "axios": "^0.24.0",
     "bem-helpers": "^1.1.0",
@@ -59,7 +59,6 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@metamask/providers": "^8.1.1",
-    "@nevermined-io/nevermined-sdk-js": "^0.25.0",
     "@react-mock/state": "^0.1.8",
     "@types/lodash.uniqby": "^4.7.6",
     "@types/node": "^12.0.0",

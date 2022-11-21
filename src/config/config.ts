@@ -1,9 +1,8 @@
-import { Config } from '@nevermined-io/nevermined-sdk-js'
-import { AuthToken } from '@nevermined-io/catalog-core'
+import { AuthToken, Config } from '@nevermined-io/catalog-core'
 import { ethers } from 'ethers'
 
-export const gatewayAddress = '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'
-export const gatewayUri = 'https://gateway.mumbai.public.nevermined.network'
+export const neverminedNodeAddress = '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'
+export const neverminedNodeUri = 'https://node.mumbai.public.nevermined.network'
 export const faucetUri = 'https://faucet.rinkeby.nevermined.rocks'
 export const acceptedChainId = '80001' // for Mumbai
 export const rootUri = 'http://localhost:3445'
@@ -18,10 +17,10 @@ export const poapDIDZeroX = '0x586a7fece25c9bff23b72f257ce2ab1495778921dedeb2a41
 export const appConfig: Config = {
   web3Provider:
     typeof window !== 'undefined' ? window.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
-  gatewayUri,
+  neverminedNodeUri,
   faucetUri,
   verbose: 2,
-  gatewayAddress,
+  neverminedNodeAddress,
   graphHttpUri,
   marketplaceAuthToken: AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token,
   marketplaceUri,

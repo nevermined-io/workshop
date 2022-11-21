@@ -5,14 +5,13 @@
  */
 
 import {
-  AccountModule,
   BigNumber,
   getCurrentAccount,
   getRoyaltyScheme,
   Nevermined,
   RoyaltyKind,
+  AssetRewards
 } from '@nevermined-io/catalog-core'
-import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import type {
   AssetPublishParams,
   AssetPublishProviderState,
@@ -22,7 +21,6 @@ import { appConfig, erc20TokenAddress } from 'config/config'
 
 export const solution2 = async (
   sdk: Nevermined,
-  account: AccountModule,
   publishNFT1155: AssetPublishProviderState['publishNFT1155'],
   assetPublish: AssetPublishParams,
   quantity: string,
@@ -41,16 +39,9 @@ export const solution2 = async (
       amount: 0,
     }
 
-    if (
-      !account.isTokenValid() ||
-      account.getAddressTokenSigner().toLowerCase() !== publisher.getId().toLowerCase()
-    ) {
-      await account.generateToken()
-    }
-
     try {
       await publishNFT1155({
-        gatewayAddress: String(appConfig.gatewayAddress),
+        neverminedNodeAddress: String(appConfig.neverminedNodeAddress),
         assetRewards,
         metadata: {
           main: {

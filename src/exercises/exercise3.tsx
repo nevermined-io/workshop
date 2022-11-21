@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BigNumber, Catalog, DDO, getCurrentAccount } from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { AppContext } from 'utils/app-context'
 import { type AssetInfo, mapDdoToAsset } from 'utils/utils'
@@ -8,8 +8,8 @@ import { type AssetInfo, mapDdoToAsset } from 'utils/utils'
 const pageSize = 20
 
 const BuyAsset = ({ ddo }: { ddo: DDO }) => {
-  const { assets, account, isLoadingSDK, subscription, sdk } = Catalog.useNevermined()
-  const { walletAddress } = MetaMask.useWallet()
+  const { assets, account, isLoadingSDK, nfts, sdk } = Catalog.useNevermined()
+  const { walletAddress } = useWallet()
   const [ownNFT1155, setOwnNFT1155] = useState(false)
   const [isBought, setIsBought] = useState(false)
   const [owner, setOwner] = useState('')
@@ -58,7 +58,7 @@ const BuyAsset = ({ ddo }: { ddo: DDO }) => {
 
 export const Exercise3 = () => {
   const { sdk } = Catalog.useNevermined()
-  const { walletAddress } = MetaMask.useWallet()
+  const { walletAddress } = useWallet()
   const { enableNextStep } = useContext(AppContext)
   const [assets, setAssets] = useState<AssetInfo[]>([])
   const [isLoading, setIsLoading] = useState(false)
