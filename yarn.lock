@@ -2165,30 +2165,6 @@
     nodemon "^2.0.16"
     wagmi "^0.7.15"
 
-"@nevermined-io/nevermined-sdk-js@^0.25.0":
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.25.1.tgz#82535475d9291fffea0e85b3da702c554cc1c0f0"
-  integrity sha512-VTQnRu7NO1nn4nuJrws/DrA+0A8ptvQyn1AIIui9Vf4fneJnk4UYqGs0zkUpBVhu/D1374ieOvB1cZQKXdFLIg==
-  dependencies:
-    "@nevermined-io/subgraphs" "0.4.1"
-    assert "^2.0.0"
-    codegen-graph-ts "npm:@nevermined-io/codegen-graph-ts@0.1.4"
-    crypto-browserify "^3.12.0"
-    deprecated-decorator "^0.1.6"
-    ethers "^5.6.9"
-    https-browserify "^1.0.0"
-    jose "^4.5.1"
-    js-file-download "^0.4.12"
-    node-fetch "^2.6.1"
-    os-browserify "^0.3.0"
-    path-browserify "^1.0.1"
-    save-file "^2.3.1"
-    stream-browserify "^3.0.0"
-    stream-http "^3.2.0"
-    url "^0.11.0"
-    uuid "^3.4.0"
-    whatwg-url "^7.1.0"
-
 "@nevermined-io/nevermined-sdk-js@^0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.26.0.tgz#b73a54ab27d54cdea1a4f8216c91af2490f8ee62"
@@ -8336,9 +8312,9 @@ json-stringify-safe@^5.0.1:
   integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
 
 json5@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
-  integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.2.tgz#63d98d60f21b313b77c4d6da18bfa69d80e1d593"
+  integrity sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==
   dependencies:
     minimist "^1.2.0"
 
